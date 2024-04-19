@@ -11,7 +11,7 @@ export const CartProvider = ({ children }) => {
   const [invoiceItems, setInvoiceItems] = useState([]); // New state for total amount
   const [InvTotalPrice, setInvTotalPrice] = useState([]); // New state for total amount
   const [Role,setRole]=useState()
-
+  const [UserName,setUserName]=useState()
 
   useEffect(() => {
     // Calculate total amount whenever cartItems change
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart,setCartData,cartData,setCartItems,setScannedBarcode,scannedBarcode,totalAmount,invoiceItems,setInvoiceItems,InvTotalPrice,setInvTotalPrice,Role,setRole }}>
+    <CartContext.Provider value={{ cartItems, addToCart,setCartData,cartData,setCartItems,setScannedBarcode,scannedBarcode,totalAmount,invoiceItems,setInvoiceItems,InvTotalPrice,setInvTotalPrice,Role,setRole,UserName,setUserName }}>
       {children}
     </CartContext.Provider>
   );

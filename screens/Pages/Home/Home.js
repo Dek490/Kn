@@ -15,7 +15,7 @@ const Home = () => {
     const navigation = useNavigation();
     const [searchQuery, setSearchQuery] = useState('');
     const { state } = useContext(AuthContext); // Access the AuthContext
-    const { totalAmount} = useCart(); // Access the total amount from the context
+    const { totalAmount,UserName} = useCart(); // Access the total amount from the context
     
 
 
@@ -37,7 +37,7 @@ const Home = () => {
 
                         {/* Access the username from the state */}
                         {/* <Text style={styles.userName}>{`Hi ${state?.username || 'Mohamed Abdulkadir'}`}</Text> */}
-                        <Text style={styles.userName}>{`Hi ${state?.username || 'Mahad Bulle'}`}</Text>
+                        <Text style={styles.userName}>Hi {UserName}</Text>
                     </View>
 
                     <HeaderMenu/>

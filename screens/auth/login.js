@@ -19,7 +19,7 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const {setRole}=useCart()
+  const {setRole,setUserName}=useCart()
 
 
 //     // functions
@@ -112,6 +112,7 @@ const Login = ({ navigation }) => {
           const decoded = jwtDecode(data);
           console.log("Tokens decoded Now ==> ",decoded);
           setRole(decoded.Roles)
+          setUserName(decoded.name)
 
       } catch (error) {
         console.log("Error decoding",error.message)
