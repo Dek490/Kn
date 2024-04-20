@@ -19,6 +19,7 @@ import Users from "../../screens/auth/Users/Users";
 import AllInvoices from "../../screens/Pages/Invoice/AllInvoices";
 import TestIinvoices from "../../screens/Pages/Invoice/TestIinvoices";
 import TInvoices from "../../screens/Pages/Invoice/TodatysInvoice";
+import Dashboard from "../../screens/Pages/Dashboard/Dashboard";
 
 
 const ScreenMenuu = () => {
@@ -38,6 +39,14 @@ const ScreenMenuu = () => {
 
         <Stack.Navigator initialRouteName='Login'>
 
+            <Stack.Screen
+                name="Dashboard"
+                component={Dashboard}
+                options={{
+                    headerShown: false,
+                    headerRight: () => <HeaderMenu />,
+                }}
+            />
             <Stack.Screen
                 name="Home"
                 component={Home}

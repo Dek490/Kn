@@ -5,6 +5,7 @@ import FooterMenu from '../../../components/Menus/FooterMenu';
 import axios from 'axios';
 import { AntDesign } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
+import { Currecy } from '../../../shared/config';
 
 
 
@@ -79,8 +80,8 @@ const Cart = ({ navigation }) => {
                                         onChangeText={(value) => handleQuantityChange(index, value)}
                                         keyboardType="numeric"
                                     />
-                                    <Text style={styles.tableCell}>${item.buyingprice || 'N/A'}</Text>
-                                    <Text style={styles.tableCell}>${item.buyingprice * item.quantity || 'N/A'}</Text>
+                                    <Text style={styles.tableCell}>{Currecy}:{item.buyingprice || 'N/A'}</Text>
+                                    <Text style={styles.tableCell}>{Currecy}:{item.buyingprice * item.quantity || 'N/A'}</Text>
                                     <Text style={styles.tableCell}>
                                         <TouchableOpacity  style={styles.DeleteIcon} onPress={() => removeItem(index)}>
                                             <AntDesign name="delete" style={styles.iconStyle} />
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     DeleteIcon:{
         backgroundColor: 'tomato', 
         borderRadius: 5,
-        padding:3,
+        padding:2,
     }
 });
 

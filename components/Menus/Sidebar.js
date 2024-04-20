@@ -21,9 +21,13 @@ const Sidebar = ({ showSidebar, setShowSidebar, handleLogout }) => {
           </View>
 
           {/* Menu Items */}
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {navigation.navigate('Dashboard'); setShowSidebar(false)}}>
             <FontAwesome5 name="home" style={styles.menuIcon} />
             <Text style={styles.menuText}>Dashboard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {navigation.navigate('Home'); setShowSidebar(false)}}>
+            <FontAwesome5 name="home" style={styles.menuIcon} />
+            <Text style={styles.menuText}>Home</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => {navigation.navigate('Category'); setShowSidebar(false)}}>
           <FontAwesome5 name="layer-group" style={styles.menuIcon} />

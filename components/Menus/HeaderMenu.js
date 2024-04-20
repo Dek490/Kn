@@ -11,7 +11,6 @@ import { useCart } from '../../context/CartContext';
 const HeaderMenu = () => {
   const [state, setState] = useContext(AuthContext);
   const navigation = useNavigation();
-  const [isAdmin, setIsAdmin] = useState(true);
   const [showSidebar, setShowSidebar] = useState(false);
   const {Role}=useCart()
 
@@ -36,7 +35,7 @@ const HeaderMenu = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-    {Role === 'Admin' && (
+    {Role === 'Admin' && !showSidebar &&(
       <TouchableOpacity onPress={() => setShowSidebar(true)}>
         <FontAwesome5 name="ellipsis-v" color={'#5FC084'} style={styles.iconStyle} />
       </TouchableOpacity>

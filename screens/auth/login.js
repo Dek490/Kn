@@ -19,7 +19,8 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const {setRole,setUserName}=useCart()
+  const {Role,setRole,setUserName}=useCart()
+  const [wrongcridential,setWrongcridential] = useState(false)
 
 
 //     // functions
@@ -93,11 +94,20 @@ const Login = ({ navigation }) => {
         const { data } = await axios.post("/login", { email, password });
         setState(data);
         await AsyncStorage.setItem("@auth", JSON.stringify(data));
-        navigation.navigate("Home");
+        let Token = await AsyncStorage.getItem("@auth");  
+        const decoded = jwtDecode(Token);
+        if(decoded.Roles==="Admin"){
+          navigation.navigate("Dashboard");
+        }else if(decoded.Roles==="Sales"){
+           navigation.navigate("Home");
+        }
+        
         console.log("Login Data==> ", { email, password });
+        setWrongcridential(false)
         reset();
       } catch (error) {
-        alert(error.response.data.message);
+        // alert(error.response.data.message);
+        setWrongcridential(true)
         setLoading(false);
         console.log(error);
       }
@@ -125,6 +135,9 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.pageTitle}>Sign in</Text>
+      {wrongcridential && <Text style={styles.WrongCridential}>Incorrect Username or Password</Text>}
+
+
       <View style={{ marginHorizontal: 20 }}>
         <InputBox
           inputTitle="Email"
@@ -144,12 +157,12 @@ const Login = ({ navigation }) => {
 
       <SubmitButton btnTitle="Login" loading={loading} handleSubmit={handleSubmits} />
 
-      <Text style={styles.linkText}>
+      {/* <Text style={styles.linkText}>
         Don't have an account?{' '}
         <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
           Register
         </Text>{' '}
-      </Text>
+      </Text> */}
     </View>
   );
 };
@@ -166,6 +179,12 @@ const styles = StyleSheet.create({
     color: '#1e2225',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  WrongCridential: {
+    fontSize: 16,
+    color: 'red',
+    textAlign: 'center',
+    margin:10,
   },
   linkText: {
     textAlign: 'center',
