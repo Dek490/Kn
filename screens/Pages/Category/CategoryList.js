@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
     },
     table: {
         minWidth: 320,
+        maxHeight: 370,
         backgroundColor: 'white',
     },
     head: { height: 40, backgroundColor: '#C9DED1' },

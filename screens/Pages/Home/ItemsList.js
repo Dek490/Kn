@@ -1,5 +1,5 @@
 import React, { useState, useEffect,memo,useCallback  } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Pressable,ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Pressable,ActivityIndicator, TextInput } from 'react-native';
 import axios from 'axios';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Modal from 'react-native-modal';
@@ -16,16 +16,20 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   //Holds Popup to View Selected Item
   const [isModalVisible, setModalVisible] = useState(false);
+  //Edit Qty Model
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editItemQuantity, setEditItemQuantity] = useState(0);
   //Selected Category to filter items of that category
   const [selectedCategory, setSelectedCategory] = useState(null);
   //Category List
   const [categories, setCategories] = useState([]);
   const navigation = useNavigation();
   //Add To the Cart list
-  const { addToCart, setCartData, cartItems } = useCart();
+  const { addToCart, setCartData, cartItems,setCartItems } = useCart();
   const [time, setTime] = useState(new Date());
 //Loading 
   const [loading, setLoading] = useState(true);
+  const [index, setIndex] = useState(true);
 
 
 //Category List Api
@@ -95,7 +99,22 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
   const toggleModal = (item) => {
     setSelectedItem(item);
     setModalVisible(!isModalVisible);
+
   };
+  const toggleModal1 = () => {
+    setEditModalVisible(false)
+  };
+  const handleQuantityChange = (value) => {
+
+    const updatedCartItems = cartItems.map((cartItem) => {
+      if (cartItem._id === editItemQuantity._id) {
+        return { ...cartItem, quantity: parseInt(value, 10) };
+      }
+      return cartItem;
+    });
+    setCartItems(updatedCartItems)
+
+};
 
 
   if (loading) {
@@ -178,7 +197,7 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
               <TouchableOpacity onPress={() => toggleModal(item)} style={styles.seemoreButton}>
                 <Text style={styles.seemoreText}>---</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleAddToCart(item)} style={styles.cartButton}>
+              <TouchableOpacity onPress={() => handleAddToCart(item)} style={styles.cartButton} >
                 <FontAwesome5 name="shopping-cart" style={styles.cartIcon} />
                 {cartItems.find((cartItem) => cartItem._id === item._id) && (
                   <View style={styles.badgeContainer}>
@@ -186,6 +205,20 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
                   </View>
                 )}
               </TouchableOpacity>
+              <TouchableOpacity onPress={() =>  
+              {
+                console.log("Edited",cartItems.find((cartItem) => cartItem._id === item._id)?.quantity || 0);
+                setIndex(index)
+                  setEditItemQuantity(cartItems.find((cartItem) => cartItem._id === item._id));
+                  setEditModalVisible(true);
+              
+              }} 
+
+               
+
+               >
+                 <FontAwesome5 name="ellipsis-v" color={'#595454'} style={styles.iconStyle} />
+             </TouchableOpacity>
             </View>
           )}
           keyExtractor={(item) => item._id}
@@ -209,6 +242,28 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
           </Pressable>
         </View>
       </Modal>
+
+      {editModalVisible && (
+      <Modal isVisible={editModalVisible} onBackdropPress={()=>{
+        setEditModalVisible(false)
+      }} style={styles.modal2}>
+        <View style={styles.modalContent2}>
+            <View style={styles.modalText2}>
+              <Text style={styles.modalLabel2}>Edit the Quantity Of</Text>
+              <Text> {editItemQuantity?.description || 'N/A'}</Text>
+             </View>
+            <TextInput
+  style={styles.quantityInput}
+  value={editItemQuantity?.quantity?.toString()}
+  onChangeText={(value) => handleQuantityChange(value)}
+  keyboardType="numeric"
+/>
+          <Pressable style={styles.closeButton2} onPress={toggleModal1}>
+            <Text style={styles.closeText}>Close</Text>
+          </Pressable>
+        </View>
+      </Modal>
+      )}
     </View>
   );
 };
@@ -220,6 +275,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 2,
   },
+  quantityInput: {
+    flex: 1,
+    fontSize: 16,
+    textAlign: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingVertical: 5,
+    marginHorizontal: 5,
+},
 
   dropdownContainer: {
     flexDirection: 'row',
@@ -236,6 +301,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 8,
+  },
+  iconStyle: {
+    marginBottom: 3,
+    alignSelf: 'center',
+    fontSize: 25,
+    marginTop: 5,
+    marginLeft: 5,
   },
 
   headerRow: {
@@ -323,6 +395,16 @@ const styles = StyleSheet.create({
     right: 15,
     bottom: 10,
   },
+  closeButton2: {
+    backgroundColor: "#E1C552",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    width: 80,
+    marginTop:10,
+    justifyContent: "center",
+
+  },
   seemoreText: {
     color: "white",
     fontSize: 14,
@@ -337,11 +419,27 @@ const styles = StyleSheet.create({
   modal: {
     margin: 0,
   },
+  modal2: {
+    margin: 0,
+    maxHeight:250,
+    justifyContent: "center",
+    position:'absolute',
+    top:'45%',
+    left:'18%'
+
+  },
   modalContent: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
     maxHeight: '80%',
+    alignSelf: 'center',
+  },
+  modalContent2: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    height:200,
     alignSelf: 'center',
   },
   modalTitle: {
@@ -353,7 +451,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
+  modalText2: {
+    marginBottom: 5,
+    flexDirection: 'column',
+  },
   modalLabel: {
+    fontWeight: 'bold',
+  },
+  modalLabel2: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
   scrollView: {

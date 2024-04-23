@@ -45,6 +45,8 @@ const Cart = ({ navigation }) => {
         const updatedCartItems = [...cartItems];
         updatedCartItems[index].quantity = parseInt(value, 10) || 0;
         setCartItems(updatedCartItems);
+       
+
     };
 
     const removeItem = (index) => {
@@ -92,7 +94,7 @@ const Cart = ({ navigation }) => {
                         </ScrollView>
                         <View style={[styles.tableRow, styles.totalRow]}>
                             <Text style={styles.totalLabel}>Total Amount:</Text>
-                            <Text style={styles.totalAmount}>${totalAmount}</Text>
+                            <Text style={styles.totalAmount}>{Currecy}:{totalAmount}</Text>
                         </View>
 
                     </View>
