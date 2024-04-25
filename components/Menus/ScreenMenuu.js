@@ -20,7 +20,7 @@ import AllInvoices from "../../screens/Pages/Invoice/AllInvoices";
 import TestIinvoices from "../../screens/Pages/Invoice/TestIinvoices";
 import TInvoices from "../../screens/Pages/Invoice/TodatysInvoice";
 import Dashboard from "../../screens/Pages/Dashboard/Dashboard";
-
+import NewItemBarcode from "../../screens/Pages/Dashboard/NewItemBarcode"
 
 const ScreenMenuu = () => {
     //global state
@@ -151,6 +151,14 @@ const ScreenMenuu = () => {
             <Stack.Screen
                 name="Users"
                 component={Users}
+                options={{
+                    headerBackTitle: "Back",
+                    headerRight: () => <HeaderMenu />,
+                }}
+            />
+            <Stack.Screen
+                name="NewItemBarcode"
+                component={NewItemBarcode}
                 options={{
                     headerBackTitle: "Back",
                     headerRight: () => <HeaderMenu />,

@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity,SafeAreaView } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity,SafeAreaView ,Button} from 'react-native';
+import React, { useContext, useEffect, useState ,useRef} from 'react';
 import { useForm, Controller } from "react-hook-form";
 import FooterMenu from '../../../components/Menus/FooterMenu';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -11,7 +11,8 @@ import axios from 'axios';
 import Latest10inoices from './Latest10inoices';
 import Toast from "react-native-toast-message";
 import RNPickerSelect from 'react-native-picker-select';
-
+import { MaterialIcons } from '@expo/vector-icons';
+import { Camera } from 'expo-camera';
 const Dashboard = () => {
     // const navigation = useNavigation();
     // const [searchQuery, setSearchQuery] = useState('');
@@ -30,6 +31,14 @@ const Dashboard = () => {
     const [isCategory, setIsCategory] = useState(false);
     const [isSubCatgory, setisSubCategory] = useState(false);
     const [isItem, setIsItem] = useState(false);
+    const [isBarcode, setIsBarcode] = useState(false);
+    const navigation = useNavigation();
+    const [scanned, setScanned] = useState(false);
+    const [torchOn, setTorchOn] = useState(false);
+    const [scannedItem, setScannedItem] = useState(null);
+    const cameraRef = useRef(null);
+    const [newItemByBarcode, setNewItemByBarcode] = useState();
+
 
     useEffect(() => {
         fetchData();
@@ -85,6 +94,7 @@ const Dashboard = () => {
     };
     
     const onSubmit = async (formData) => {
+        console.log("Scanned",formData)
         try {
 
             if(isCategory){
@@ -100,6 +110,7 @@ const Dashboard = () => {
                 fetchCategories()
 
             }else if(isItem){
+                
 
                     await axios.post('/items', {
                     categoryId: selectedCategoryID,
@@ -152,6 +163,7 @@ const Dashboard = () => {
     const handleClose = () => {
         reset();
         setModalVisible(false);
+        setIsBarcode(false)
      
     };
 
@@ -177,7 +189,20 @@ const Dashboard = () => {
         setIsItem(false)
 
     }
-    
+    const NewItemBarcode =()=>{
+        setIsBarcode(true)
+        setIsCategory(false)
+        setisSubCategory(false)
+        setIsItem(false)
+        setIsItem(true)
+
+    }
+  const getBarcode = async({data})=>{
+    setNewItemByBarcode(data? data: null);
+    setIsBarcode(false)
+
+
+  }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -531,25 +556,36 @@ const Dashboard = () => {
 
                         {/* TextInput for entering barcode */}
                         <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <View style={{ flexDirection: 'column' }}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="barcode"
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                    />
-                                </View>
+  control={control}
+  render={({ field: { onChange, onBlur, value } }) => (
+    <View style={styles.barcode}>
+      <TextInput
+        style={styles.barcodeinput}
+        placeholder="barcode"
+        onBlur={onBlur}
+        onChangeText={(text) => {
+          onChange(text);
+          setNewItemByBarcode(null);
+        }}
+        value={newItemByBarcode !== null ? newItemByBarcode : value}
+         defaultValue={newItemByBarcode}
+      />
+      <TouchableOpacity onPress={NewItemBarcode}>
+        <View style={styles.barcodeContainer}>
+          <FontAwesome5
+            name="camera"
+            style={styles.cameraIcon}
+          />
+        </View>
+      </TouchableOpacity>
+    </View>
+  )}
+  name="barcode"
+  rules={{required: "barcode is required"}}
+/>
 
-                            )}
-                            name="barcode"
-                            rules={{ required: 'barcode is required' }}
-                            // defaultValue={ItemIdToUpdate.id ? ItemIdToUpdate.data.barcode.toString() : ''}
-                        />
+{errors.barcode && <Text style={styles.errorText}>{errors.barcode.message}</Text>}
 
-                        {errors.barcode && <Text style={styles.errorText}>{errors.barcode.message}</Text>}
 
 
                             </View>
@@ -571,6 +607,33 @@ const Dashboard = () => {
                                 <Text style={styles.buttonText}>Close</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isBarcode}
+                onRequestClose={handleClose}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.barcodemodalContent}>
+      <View style={styles.barcodebox}>
+        <Camera
+          ref={cameraRef}
+          type={Camera.Constants.Type.back}
+          onBarCodeScanned={getBarcode}
+          style={{ height: 400, width: 400 }}
+          flashMode={torchOn ? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off}
+        />
+      </View>
+
+
+
+
+
+
                     </View>
                 </View>
             </Modal>
@@ -816,6 +879,9 @@ const styles = StyleSheet.create({
         padding: 20,
         width: "80%",
     },
+    barcodemodalContent: {
+        borderRadius: 10,
+    },
     modalHeader: {
         fontSize: 20,
         fontWeight: "bold",
@@ -853,7 +919,33 @@ const styles = StyleSheet.create({
         color: "red",
         marginBottom: 5,
     },
-
+    barcode:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        marginBottom: 5,
+    },
+    barcodeinput:{
+        marginLeft: 6,
+    },
+    barcodebox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 250,
+        width: 250,
+        overflow: 'hidden',
+        borderRadius: 30,
+        backgroundColor: 'tomato'
+      },
+      buttonsContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: '80%',
+        marginTop: 20,
+        
+      },
 
 });
 

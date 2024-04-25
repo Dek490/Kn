@@ -115,12 +115,12 @@ const Login = ({ navigation }) => {
     //temp function to check local storage data
     const getLcoalStorageData = async () => {
      let data = await AsyncStorage.getItem("@auth");  
-      console.log("Local Storage Of Token==> ", data);
+      // console.log("Local Storage Of Token==> ", data);
       try {
           // const Base64token =Base64(data);
           // let token = "HloBJVwOLNLr4TQeBB2i+w=="
           const decoded = jwtDecode(data);
-          console.log("Tokens decoded Now ==> ",decoded);
+          // console.log("Tokens decoded Now ==> ",decoded);
           setRole(decoded.Roles)
           setUserName(decoded.name)
 

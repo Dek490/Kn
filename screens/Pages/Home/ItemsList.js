@@ -80,7 +80,9 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
 
   //Put the selected to the cart list
   const handleAddToCart = (item) => {
+    console.log("clicked before")
     addToCart(item);
+    console.log("clicked after")
   };
 
   const handleScanResult = (item) => {
