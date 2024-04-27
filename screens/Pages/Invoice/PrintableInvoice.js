@@ -51,6 +51,7 @@ const PrintableInvoice = () => {
 const styles = StyleSheet.create({
   container: {
     // padding: 20,
+    minWidth:300
   },
   title: {
     fontSize: 30,

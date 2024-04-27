@@ -31,10 +31,10 @@ const Cart = ({ navigation }) => {
             setCartItems([]); // Clear cart items
             setSubmitted(true); // Set submitted to true
 
-            // Navigate to the invoice page after 5 seconds
-            setTimeout(() => {
-                navigation.navigate('Invoices'); // Replace 'Invoices' with the name of your invoice page in the navigation stack
-            }, 3000);
+            // // Navigate to the invoice page after 5 seconds
+            // setTimeout(() => {
+            //     navigation.navigate('Invoices'); // Replace 'Invoices' with the name of your invoice page in the navigation stack
+            // }, 3000);
 
         } catch (error) {
             console.log('Not Success', error);
@@ -68,8 +68,8 @@ const Cart = ({ navigation }) => {
                         <View style={styles.tableHeader}>
                             <Text style={styles.tableHeaderCellForName}>Name</Text>
                             <Text style={styles.tableHeaderCell}>Quantity</Text>
-                            <Text style={styles.tableHeaderCell}>Price</Text>
-                            <Text style={styles.tableHeaderCell}>Total</Text>
+                            <Text style={styles.tableHeaderCell}>Price({Currecy})</Text>
+                            <Text style={styles.tableHeaderCell}>Total({Currecy})</Text>
                             <Text style={styles.tableHeaderCell}>Action</Text>
                         </View>
                         <ScrollView style={styles.tableContainers} >
@@ -82,8 +82,8 @@ const Cart = ({ navigation }) => {
                                         onChangeText={(value) => handleQuantityChange(index, value)}
                                         keyboardType="numeric"
                                     />
-                                    <Text style={styles.tableCell}>{Currecy}:{item.buyingprice || 'N/A'}</Text>
-                                    <Text style={styles.tableCell}>{Currecy}:{item.buyingprice * item.quantity || 'N/A'}</Text>
+                                    <Text style={styles.tableCell}>{item.buyingprice || 'N/A'}</Text>
+                                    <Text style={styles.tableCell}>{item.buyingprice * item.quantity || 'N/A'}</Text>
                                     <Text style={styles.tableCell}>
                                         <TouchableOpacity  style={styles.DeleteIcon} onPress={() => removeItem(index)}>
                                             <AntDesign name="delete" style={styles.iconStyle} />
@@ -147,17 +147,17 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
     tableHeaderCell: {
-        flex: 1,
+        flex: 2,
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 13,
         textAlign: 'center',
     },
     tableHeaderCellForName: {
         flex: 1,
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 13,
         textAlign: 'left',
-        marginLeft: 5,
+        // marginLeft: 5,
     },
     tableRow: {
         flexDirection: 'row',

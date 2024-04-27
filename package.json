@@ -9,18 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/config-plugins": "~6.0.0",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.21.0",
-    "@react-native-community/datetimepicker": "^7.6.4",
+    "@react-native-community/datetimepicker": "7.6.1",
     "@react-native-picker/picker": "^2.6.1",
-    "@react-navigation/native": "^6.1.14",
+    "@react-navigation/drawer": "^6.6.15",
+    "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.22",
     "axios": "^1.6.7",
     "base-64": "^1.0.0",
     "core-js": "^3.37.0",
-    "expo": "~50.0.14",
+    "expo": "~50.0.17",
     "expo-barcode-scanner": "~12.9.3",
-    "expo-camera": "~14.1.1",
+    "expo-camera": "~14.1.3",
+    "expo-print": "~12.8.1",
     "expo-status-bar": "~1.11.1",
     "formik": "^2.4.5",
     "js-base64": "^3.7.7",
@@ -36,6 +39,7 @@
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modal": "^13.0.1",
     "react-native-picker-select": "^9.1.3",
+    "react-native-print": "^0.11.0",
     "react-native-table-component": "^1.2.2",
     "react-native-toast-message": "^2.2.0",
     "react-native-vector-icons": "^10.0.3",
@@ -44,5 +48,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "resolutions": {
+    "@expo/config-plugins": "~6.0.0"
+  }
 }
