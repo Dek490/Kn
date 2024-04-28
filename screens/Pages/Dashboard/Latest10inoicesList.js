@@ -61,7 +61,7 @@ const Latest10inoicesList = ({ invoices, loading, handleDelete, handleEdit, View
             <View>
                 <Table style={styles.table}>
                     {/* Table headers */}
-                    <Row data={['#', 'Inv_No', 'items', 'price', 'Actions']} style={styles.head} textStyle={styles.headText} flexArr={[2, 5, 4, 5, 6]} />
+                    <Row data={['#', 'Inv_No', 'items', `price(${Currecy})`, 'Actions']} style={styles.head} textStyle={styles.headText} flexArr={[2, 5, 4, 6, 4]} />
                 </Table>
                 <FlatList
                     data={invoices}
@@ -72,7 +72,7 @@ const Latest10inoicesList = ({ invoices, loading, handleDelete, handleEdit, View
                                 <Text style={styles.longText}>{index + 1}</Text>,
                                 <Text style={styles.longText}>{item?.orders.order_id}</Text>,
                                 <Text style={styles.OrderlongText}>{item?.orders.totalOrders}</Text>,
-                                <Text style={styles.PriceQty}>{Currecy}:{item?.orders.totalPrice}</Text>,
+                                <Text style={styles.PriceQty}>{item?.orders.totalPrice}</Text>,
                                 <View style={styles.actions}>
 
                                     <TouchableOpacity onPress={() => handleEdit(item.orders.order_id)} style={styles.actionButton}>
@@ -101,7 +101,7 @@ const Latest10inoicesList = ({ invoices, loading, handleDelete, handleEdit, View
                             ]}
                             style={styles.row}
                             textStyle={styles.text}
-                            flexArr={[2, 4, 2, 4, 6]}
+                            flexArr={[2, 4, 2, 4, 5]}
                         />
                     )}
                     keyExtractor={(item, index) => index.toString()}
@@ -119,7 +119,7 @@ const Latest10inoicesList = ({ invoices, loading, handleDelete, handleEdit, View
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalHeader}>Are You Sure To Delete</Text>
+                        <Text style={styles.modalHeader}>Are You Sure To Return</Text>
                         <View style={styles.modalFooter}>
                             <TouchableOpacity
                                 style={[styles.modalButton, { backgroundColor: "red" }]}
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     head: { height: 40, backgroundColor: '#C9DED1' },
-    headText: { margin: 6, fontWeight: 'bold' },
+    headText: { fontWeight: 'bold',fontSize: 12 },
     row: {
         flexDirection: 'row',
         height: 40,
@@ -188,20 +188,23 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: 'row',
         justifyContent: 'space-around',
+        
 
     },
     actionButton: {
-        padding: 5,
+        padding: 3,
         borderRadius: 5,
         backgroundColor: '#6cba8a',
         marginBottom: 5
     },
     ViewInvButton: {
         backgroundColor: '#E1C552',
+        fontSize:10
 
     },
     deleteButton: {
         backgroundColor: 'red',
+        fontSize:10
     },
 
     modalContainer: {
@@ -269,10 +272,12 @@ const styles = StyleSheet.create({
     },
     longText: {
         flex: 1, // Allow text to overflow and wrap dynamically
+        fontSize:13
     },
     OrderlongText: {
         flex: 1,
-        textAlign: "center"
+        textAlign: "center",
+        fontSize:15
     },
 
     modalTitle: {
@@ -299,6 +304,7 @@ const styles = StyleSheet.create({
     PriceQty: {
         flex: 1,
         textAlign: 'center',
+        fontSize:13
     },
     RowCell: {
         flex: 1,

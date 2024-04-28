@@ -24,7 +24,7 @@ const Dashboard = () => {
     const [subCategories, setSubCategories] = useState([]);
     const [selectedCategoryID, setSelectedCategoryID] = useState([]);
     const [selectedSubCategoryID, setSelectedSubCategoryID] = useState([]);
-    const { control, handleSubmit, formState: { errors }, reset } = useForm();
+    const { control,setValue, handleSubmit, formState: { errors }, reset } = useForm();
     const [modalVisible, setModalVisible] = useState(false);
     const [CateName, setCateName] = useState([]);
     const [SubCatName, setSubCatName] = useState([]);
@@ -193,12 +193,14 @@ const Dashboard = () => {
         setIsBarcode(true)
         setIsCategory(false)
         setisSubCategory(false)
-        setIsItem(false)
+        // setIsItem(false)
         setIsItem(true)
 
     }
   const getBarcode = async({data})=>{
     setNewItemByBarcode(data? data: null);
+    setValue("barcode", data);
+    // setValue(data)
     setIsBarcode(false)
 
 
@@ -235,16 +237,26 @@ const Dashboard = () => {
 
                 <View style={styles.Info}>
                     <View style={styles.Card1}>
-                        <Text style={styles.CardTitleText}>Number Of Categories</Text>
                         <Text style={styles.CardText}>{Categorylength}</Text>
+                        <Text style={styles.CardTitleText}>Categories</Text>
+                      
                         </View>
                     <View style={styles.Card2}>
-                    <Text style={styles.CardTitleText}>Sored Sub Categories</Text>
-                    <Text style={styles.CardText}>{Subcategorylength}</Text>
+                        <Text style={styles.CardText}>{Subcategorylength}</Text>
+                    <Text style={styles.CardTitleText}>Products</Text>
+                    
                     </View>
+                    {/* <View style={styles.Card3}>
+                         <Text style={styles.CardText}>{Itemslength}</Text>
+                    <Text style={styles.CardTitleText}>Items</Text>
+                   
+                    </View> */}
+                </View>
+                <View style={styles.Info2}>
                     <View style={styles.Card3}>
-                    <Text style={styles.CardTitleText}>Number Of Items</Text>
-                    <Text style={styles.CardText}>{Itemslength}</Text>
+                         <Text style={styles.CardText}>{Itemslength}</Text>
+                    <Text style={styles.CardTitleText}>Items</Text>
+                   
                     </View>
                 </View>
                 <View style={styles.shortcuts}>
@@ -252,22 +264,22 @@ const Dashboard = () => {
                         name="list"
                         style={styles.itemsIcon}
                     />
-                    <Text style={styles.itemsTxtTitle}>Shortcuts </Text>
+                    <Text style={styles.itemsTxtTitle}>Add New </Text>
                 </View>
                 <View style={styles.Activity}>
                     <View style={styles.Category}>
                         <TouchableOpacity onPress={AddNewCategory}>
-                            <Text style={{color:'white',fontSize:15,fontWeight:'bold', textAlign:'center'}}>Add New Category</Text>
+                            <Text style={{color:'white',fontSize:14,fontWeight:'bold', textAlign:'center'}}>Category</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.Subcategory}>
                     <TouchableOpacity  onPress={AddNewSubcategory}>
-                    <Text style={{color:'white',fontSize:15,fontWeight:'bold', textAlign:'center'}}>Add Sub Category</Text>
+                    <Text style={{color:'white',fontSize:14,fontWeight:'bold', textAlign:'center'}}>Product</Text>
                     </TouchableOpacity>
                     </View>
                     <View>
                     <TouchableOpacity style={styles.Items}  onPress={AddNewItem}>
-                    <Text style={{color:'white',fontSize:15,fontWeight:'bold', textAlign:'center'}}>Add New Item</Text>
+                    <Text style={{color:'white',fontSize:14,fontWeight:'bold', textAlign:'center'}}>Item</Text>
                     </TouchableOpacity>
                     </View>
                 </View>
@@ -567,8 +579,9 @@ const Dashboard = () => {
           onChange(text);
           setNewItemByBarcode(null);
         }}
-        value={newItemByBarcode !== null ? newItemByBarcode : value}
-         defaultValue={newItemByBarcode}
+
+        value={value}
+         
       />
       <TouchableOpacity onPress={NewItemBarcode}>
         <View style={styles.barcodeContainer}>
@@ -798,42 +811,55 @@ const styles = StyleSheet.create({
 
 
     },
+    Info2:{
+        marginLeft:12,
+        marginTop:10
+
+
+    },
     Card1:{
-        height:100,
-        width:100,
+        // height:100,
+        width:150,
+        flexDirection:'row',
+        gap:6,
+        justifyContent: 'center',
         backgroundColor:"#449964",
-        alignSelf: 'center',
-        borderTopRightRadius:10,
-        borderBottomLeftRadius:10,
+        // alignSelf: 'center',
+        borderRadius:30,
         padding:10,
     },
     Card2:{
-        height:100,
-        width:100,
+        // height:100,
+        width:150,
+        flexDirection:'row',
+        gap:6,
+        justifyContent: 'center',
         backgroundColor:"#D9AF3D",
-        alignSelf: 'center',
-        borderTopRightRadius:10,
-        borderBottomLeftRadius:10,
+        // alignSelf: 'center',
+        borderRadius:30,
         padding:10,
     },
     Card3:{
-        height:100,
-        width:100,
+        // height:100,
+        width:150,
+        flexDirection:'row',
+        gap:6,
+        justifyContent: 'center',
         backgroundColor:"#bd632f",
-        alignSelf: 'center',
-        borderTopRightRadius:10,
-        borderBottomLeftRadius:10,
+        // alignSelf: 'center',
+        borderRadius:30,
         padding:10,
     },
     CardText:{
         textAlign: 'center',
         color:"white",
-        marginTop:"15%"
+        fontWeight:"bold",
+
     },
     CardTitleText:{
         textAlign: 'center',
         color:"white",
-        fontWeight:"bold",
+       
         // marginTop:"40%"
     },
     Activity:{
@@ -845,24 +871,38 @@ const styles = StyleSheet.create({
     Category:{
         backgroundColor:"#449964",
         padding:2,
-        borderRadius:5,
+        borderRadius:30,
         width:100,
-        
+        textAlign:"center",
+        display:"flex",
+        justifyContent:"center",
+        alignItems: "center",
+        paddingVertical:7,
 
     },
     Subcategory:{
         backgroundColor:"#D9AF3D",
         padding:2,
-        borderRadius:5,
+        borderRadius:30,
         width:100,
+        textAlign:"center",
+        display:"flex",
+        justifyContent:"center",
+        alignItems: "center",
+        paddingVertical:7,
         
 
     },
     Items:{
         backgroundColor:"#bd632f",
         padding:2,
-        borderRadius:5,
+        borderRadius:30,
         width:100,
+        textAlign:"center",
+        display:"flex",
+        justifyContent:"center",
+        alignItems: "center",
+        paddingVertical:7,
        
         
 
@@ -938,13 +978,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: 30,
         backgroundColor: 'tomato'
-      },
-      buttonsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: '80%',
-        marginTop: 20,
-        
       },
 
 });

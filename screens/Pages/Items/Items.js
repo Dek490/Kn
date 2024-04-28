@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Modal, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -8,6 +8,7 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import RNPickerSelect from 'react-native-picker-select';
 import { useFocusEffect } from '@react-navigation/native';
+import { Camera } from 'expo-camera';
 
 
 
@@ -22,8 +23,11 @@ const Items = () => {
     const [CateName, setCateName] = useState([]);
     const [SubCatName, setSubCatName] = useState([]);
     const [ItemIdToUpdate, setItemIdToUpdate] = useState({ id: null, name: "" }); // Updated state structure
-    const { control, handleSubmit, formState: { errors }, reset } = useForm();
-
+    const { control, handleSubmit,setValue, formState: { errors }, reset } = useForm();
+    const [torchOn, setTorchOn] = useState(false);
+    const cameraRef = useRef(null);
+    const [newItemByBarcode, setNewItemByBarcode] = useState();
+    const [isBarcode, setIsBarcode] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -188,6 +192,19 @@ const Items = () => {
         setModalVisible(false);
      
     };
+
+    const NewItemBarcode =()=>{
+        setIsBarcode(true)
+
+    }
+  const getBarcode = async({data})=>{
+    setNewItemByBarcode(data? data: null);
+    setValue("barcode", data);
+    // setValue(data)
+    setIsBarcode(false)
+
+
+  }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -429,27 +446,39 @@ const Items = () => {
 
 
                         {/* TextInput for entering barcode */}
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <View style={{ flexDirection: 'column' }}>
-                                    {ItemIdToUpdate.id ? (<Text style={{ marginLeft: 2 }}>Barcode:</Text>) : null}
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="barcode"
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                    />
-                                </View>
+             {/* TextInput for entering barcode */}
+             <Controller
+  control={control}
+  render={({ field: { onChange, onBlur, value } }) => (
+    <View style={styles.barcode}>
+      <TextInput
+        style={styles.barcodeinput}
+        placeholder="barcode"
+        onBlur={onBlur}
+        onChangeText={(text) => {
+          onChange(text);
+          setNewItemByBarcode(null);
+        }}
 
-                            )}
-                            name="barcode"
-                            rules={{ required: 'barcode is required' }}
-                            defaultValue={ItemIdToUpdate.id ? ItemIdToUpdate.data.barcode.toString() : ''}
-                        />
+        value={value}
+         
+      />
+      <TouchableOpacity onPress={NewItemBarcode}>
+        <View style={styles.barcodeContainer}>
+          <FontAwesome5
+            name="camera"
+            style={styles.cameraIcon}
+          />
+        </View>
+      </TouchableOpacity>
+    </View>
+  )}
+  name="barcode"
+  rules={{required: "barcode is required"}}
+  defaultValue={ItemIdToUpdate.id ? ItemIdToUpdate.data.barcode.toString() : ''}
+/>
 
-                        {errors.barcode && <Text style={styles.errorText}>{errors.barcode.message}</Text>}
+{errors.barcode && <Text style={styles.errorText}>{errors.barcode.message}</Text>}
 
 
 
@@ -468,6 +497,33 @@ const Items = () => {
                                 <Text style={styles.buttonText}>Close</Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isBarcode}
+                onRequestClose={handleClose}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.barcodemodalContent}>
+      <View style={styles.barcodebox}>
+        <Camera
+          ref={cameraRef}
+          type={Camera.Constants.Type.back}
+          onBarCodeScanned={getBarcode}
+          style={{ height: 400, width: 400 }}
+          flashMode={torchOn ? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off}
+        />
+      </View>
+
+
+
+
+
+
                     </View>
                 </View>
             </Modal>
@@ -561,6 +617,53 @@ const styles = StyleSheet.create({
     errorText: {
         color: "red",
         marginBottom: 5,
+    },
+    barcode:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        marginBottom: 5,
+    },
+    barcodeinput:{
+        marginLeft: 6,
+    },
+    barcodebox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 250,
+        width: 250,
+        overflow: 'hidden',
+        borderRadius: 30,
+        backgroundColor: 'tomato'
+      },
+      buttonsContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: '80%',
+        marginTop: 20,
+        
+      },
+      barcodeContainer: {
+        flexDirection: "row",
+        margin: 10
+    },
+    cameraIcon: {
+        fontSize: 20,
+        color: "white",
+        paddingHorizontal: 5,
+        backgroundColor: "#5FC084",
+        borderRadius: 5,
+        paddingVertical: 3,
+    },
+    barcodeTxt: {
+        marginLeft: 5,
+        fontSize: 20,
+        fontWeight: "500"
+    },
+      barcodemodalContent: {
+        borderRadius: 10,
     },
 });
 

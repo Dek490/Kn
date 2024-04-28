@@ -47,7 +47,7 @@ const TInvoicesList = ({ invoices, loading, handleDelete, handleEdit, ViewInv })
         );
     }
     if (invoices.length === 0) {
-        return <Text>No invoice data available.</Text>;
+        return <Text>No available invoice today</Text>;
     }
 
     return (
@@ -150,7 +150,7 @@ const TInvoicesList = ({ invoices, loading, handleDelete, handleEdit, ViewInv })
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalHeader}>Are You Sure To Delete</Text>
+                        <Text style={styles.modalHeader}>Are You Sure To Return</Text>
                         <View style={styles.modalFooter}>
                             <TouchableOpacity
                                 style={[styles.modalButton, { backgroundColor: "red" }]}

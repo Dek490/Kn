@@ -183,7 +183,7 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
         <Text style={[styles.headerSecondColumn]}>#</Text>
         <Text style={[styles.Nameheader]}>Name</Text>
         <Text style={[styles.header,styles.Columns]}>Qty</Text>
-        <Text style={[styles.header,styles.Columns]}>Price</Text>
+        <Text style={[styles.header,styles.Columns]}>Price({Currecy})</Text>
         <Text style={[styles.cell, styles.header]}>Actions</Text>
       </View>
       <View style={styles.tableContainer}>
@@ -192,9 +192,9 @@ const ItemsList = ({ searchQuery, scannedBarcode }) => {
           renderItem={({ item, index }) => (
             <View style={styles.row}>
               <Text style={[styles.cell, styles.firstColumn]}>{index + 1}</Text>
-              <Text style={[styles.widthIncrease]}>{item.subCategoryId?.subCategoryName || 'N/A'}</Text>
+              <Text style={[styles.widthIncrease]}>{item.description || 'N/A'}</Text>
               <Text style={styles.QTYColumns}>{item.quantity || 'N/A'}</Text>
-              <Text style={[styles.cell, styles.Columns]}>{Currecy}:{item.buyingprice || 'N/A'}</Text>
+              <Text style={[styles.cell, styles.Columns]}>{item.buyingprice || 'N/A'}</Text>
               
               <TouchableOpacity onPress={() => toggleModal(item)} style={styles.seemoreButton}>
                 <Text style={styles.seemoreText}>---</Text>
@@ -329,19 +329,19 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   header: {
-    flex: 1,
+    flex: 2,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 13,
   },
   Nameheader: {
     flex: 1.4,
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 13,
   },
   headerSecondColumn: {
     flex: 0.5,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 13,
   },
   cell: {
     flex: 1,
@@ -349,17 +349,17 @@ const styles = StyleSheet.create({
   },
   Namecell: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 13,
   },
   firstColumn: {
     flex: 0.5, // Adjusted flex for the first column
   },
   Columns: {
-    fontSize: 14,
+    fontSize: 13,
   },
   QTYColumns: {
-    fontSize: 14,
-    flex:0.8,
+    fontSize: 13,
+    flex:2,
     marginLeft:3
 
   },

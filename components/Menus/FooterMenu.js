@@ -35,11 +35,11 @@ const FooterMenu = () => {
         </View>
         <Text>Cart</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Invoices")}>
+      <TouchableOpacity onPress={() => navigation.navigate("TInvoices")}>
         <FontAwesome5
           name="file-invoice-dollar"
           style={styles.iconStyle}
-          color={route.name === "Invoices" ? "#E1C552" : "#727171"}
+          color={route.name === "TInvoices" ? "#E1C552" : "#727171"}
         />
         <Text>Invoices</Text>
       </TouchableOpacity>
