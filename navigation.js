@@ -9,7 +9,7 @@ const RootNavigation = () => {
         <AuthProvider>
             <CartProvider>
             <ScreenMenu/>
-            </CartProvider>
+            </CartProvider> 
         </AuthProvider>
     );
 };
